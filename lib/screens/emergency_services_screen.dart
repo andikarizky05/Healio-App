@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:provider/provider.dart';
+import '../services/localization_service.dart';
 
 class EmergencyServicesScreen extends StatelessWidget {
-  const EmergencyServicesScreen({Key? key}) : super(key: key);
+  const EmergencyServicesScreen({super.key});
 
   Future<void> _makePhoneCall(String phoneNumber) async {
     final Uri launchUri = Uri(
@@ -18,37 +20,38 @@ class EmergencyServicesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final localizationService = Provider.of<LocalizationService>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Emergency Services',
-          style: TextStyle(fontWeight: FontWeight.bold),
+        title: Text(
+          localizationService.translate('emergency_services'),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.greenAccent,
       ),
-      backgroundColor: Colors.white, // Added backgroundColor
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             _buildEmergencyCard(
               context,
-              'Ambulance',
+              localizationService.translate('ambulance'),
               Icons.emergency,
-              'Call Emergency Ambulance',
+              localizationService.translate('call_ambulance'),
               () => _makePhoneCall('911'),
               Colors.red,
             ),
             const SizedBox(height: 16),
             _buildEmergencyCard(
               context,
-              'Health Center',
+              localizationService.translate('health_center'),
               Icons.local_hospital,
-              'Find Nearest Health Center',
+              localizationService.translate('find_health_center'),
               () {
-                // TODO: Implement navigation to nearest health center
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Searching for nearest health center...')),
+                  SnackBar(content: Text(localizationService.translate('searching_health_center'))),
                 );
               },
               Colors.blue,
@@ -56,13 +59,12 @@ class EmergencyServicesScreen extends StatelessWidget {
             const SizedBox(height: 16),
             _buildEmergencyCard(
               context,
-              'Doctor',
+              localizationService.translate('doctor'),
               Icons.medical_services,
-              'Contact On-Call Doctor',
+              localizationService.translate('contact_doctor'),
               () {
-                // TODO: Implement doctor contact functionality
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Connecting to available doctor...')),
+                  SnackBar(content: Text(localizationService.translate('connecting_doctor'))),
                 );
               },
               Colors.green,

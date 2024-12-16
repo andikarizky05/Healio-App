@@ -4,11 +4,15 @@ import 'screens/home_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/logo_screen.dart';
 import 'services/auth_service.dart';
+import 'services/localization_service.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => AuthService(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthService()),
+        ChangeNotifierProvider(create: (context) => LocalizationService()),
+      ],
       child: const HelioApp(),
     ),
   );
@@ -19,6 +23,8 @@ class HelioApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final localizationService = Provider.of<LocalizationService>(context);
+    
     return MaterialApp(
       title: 'Helio Health App',
       theme: ThemeData(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../services/localization_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -17,9 +18,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizationService = Provider.of<LocalizationService>(context);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Register'),
+        title: Text(localizationService.translate('register')),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -30,13 +33,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             children: [
               TextFormField(
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: localizationService.translate('name'),
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your name';
+                    return localizationService.translate('please_enter_name');
                   }
                   return null;
                 },
@@ -44,16 +47,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _emailController,
-                decoration: const InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: localizationService.translate('email'),
+                  border: const OutlineInputBorder(),
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your email';
+                    return localizationService.translate('please_enter_email');
                   }
                   if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                    return 'Please enter a valid email';
+                    return localizationService.translate('please_enter_valid_email');
                   }
                   return null;
                 },
@@ -61,17 +64,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
+                decoration: InputDecoration(
+                  labelText: localizationService.translate('password'),
+                  border: const OutlineInputBorder(),
                 ),
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
+                    return localizationService.translate('please_enter_password');
                   }
                   if (value.length < 6) {
-                    return 'Password must be at least 6 characters long';
+                    return localizationService.translate('password_too_short');
                   }
                   return null;
                 },
@@ -88,17 +91,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     );
                     if (success) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Registration successful. Please log in.')),
+                        SnackBar(content: Text(localizationService.translate('registration_successful'))),
                       );
                       Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Registration failed. Email may already be in use.')),
+                        SnackBar(content: Text(localizationService.translate('registration_failed'))),
                       );
                     }
                   }
                 },
-                child: const Text('Register'),
+                child: Text(localizationService.translate('register')),
               ),
             ],
           ),

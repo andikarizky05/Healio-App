@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../services/localization_service.dart';
 import 'health_info_screen.dart';
 import 'nearest_facilities_screen.dart';
 import 'emergency_services_screen.dart';
 import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -22,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final localizationService = Provider.of<LocalizationService>(context);
+
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -34,22 +38,22 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey,
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            icon: Icon(Icons.health_and_safety),
-            label: 'Health Info',
+            icon: const Icon(Icons.health_and_safety),
+            label: localizationService.translate('health_info'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.local_hospital),
-            label: 'Nearest Facilities',
+            icon: const Icon(Icons.local_hospital),
+            label: localizationService.translate('nearest_facilities'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.emergency),
-            label: 'Emergency',
+            icon: const Icon(Icons.emergency),
+            label: localizationService.translate('emergency_services'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: const Icon(Icons.person),
+            label: localizationService.translate('profile'),
           ),
         ],
       ),

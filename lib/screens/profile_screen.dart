@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../services/localization_service.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  const ProfileScreen({super.key});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -31,6 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final localizationService = Provider.of<LocalizationService>(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -42,9 +44,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               const SizedBox(height: 40),
               if (authService.isAuthenticated)
-                _buildLoggedInView(authService)
+                _buildLoggedInView(authService, localizationService)
               else
-                _buildAuthForm(authService),
+                _buildAuthForm(authService, localizationService),
             ],
           ),
         ),
@@ -52,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildLoggedInView(AuthService authService) {
+  Widget _buildLoggedInView(AuthService authService, LocalizationService localizationService) {
     return Column(
       children: [
         const CircleAvatar(
@@ -70,12 +72,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: const TextStyle(fontSize: 16, color: Colors.grey),
         ),
         const SizedBox(height: 30),
-        if (_isEditing) _buildEditForm(authService) else _buildProfileActions(authService),
+        if (_isEditing) _buildEditForm(authService, localizationService) else _buildProfileActions(authService, localizationService),
+        const SizedBox(height: 20),
+        _buildLanguageSelector(localizationService),
       ],
     );
   }
 
-  Widget _buildProfileActions(AuthService authService) {
+  Widget _buildProfileActions(AuthService authService, LocalizationService localizationService) {
     return Column(
       children: [
         ElevatedButton.icon(
@@ -85,7 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             });
           },
           icon: const Icon(Icons.edit),
-          label: const Text('Edit Profile'),
+          label: Text(localizationService.translate('edit_profile')),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.blue,
             foregroundColor: Colors.white,
@@ -98,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             authService.logout();
           },
           icon: const Icon(Icons.logout),
-          label: const Text('Logout'),
+          label: Text(localizationService.translate('logout')),
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
@@ -109,16 +113,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildEditForm(AuthService authService) {
+  Widget _buildEditForm(AuthService authService, LocalizationService localizationService) {
     return Form(
       key: _formKey,
       child: Column(
         children: [
           TextFormField(
             controller: _nameController,
-            decoration: const InputDecoration(
-              labelText: 'Name',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: localizationService.translate('name'),
+              border: const OutlineInputBorder(),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -130,9 +134,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 16),
           TextFormField(
             controller: _emailController,
-            decoration: const InputDecoration(
-              labelText: 'Email',
-              border: OutlineInputBorder(),
+            decoration: InputDecoration(
+              labelText: localizationService.translate('email'),
+              border: const OutlineInputBorder(),
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
@@ -163,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 }
               }
             },
-            child: const Text('Save Changes'),
+            child: Text(localizationService.translate('save_changes')),
           ),
           const SizedBox(height: 10),
           TextButton(
@@ -172,14 +176,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _isEditing = false;
               });
             },
-            child: const Text('Cancel'),
+            child: Text(localizationService.translate('cancel')),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildAuthForm(AuthService authService) {
+  Widget _buildAuthForm(AuthService authService, LocalizationService localizationService) {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -190,15 +194,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                'Login',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              Text(
+                localizationService.translate('login'),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  labelText: 'Email',
+                  labelText: localizationService.translate('email'),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   prefixIcon: const Icon(Icons.email),
                 ),
@@ -213,7 +217,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               TextFormField(
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  labelText: 'Password',
+                  labelText: localizationService.translate('password'),
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
                   prefixIcon: const Icon(Icons.lock),
                 ),
@@ -244,25 +248,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }
                   }
                 },
-                child: const Text('Login'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
+                child: Text(localizationService.translate('login')),
               ),
               const SizedBox(height: 16),
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/register');
                 },
-                child: const Text('Need an account? Register'),
+                child: Text(localizationService.translate('need_account')),
               ),
+              const SizedBox(height: 20),
+              _buildLanguageSelector(localizationService),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildLanguageSelector(LocalizationService localizationService) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          localizationService.translate('language'),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () => localizationService.setLanguage('en'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: localizationService.currentLanguage == 'en' ? Colors.blue : Colors.grey,
+                ),
+                child: Text(localizationService.translate('english')),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () => localizationService.setLanguage('id'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: localizationService.currentLanguage == 'id' ? Colors.blue : Colors.grey,
+                ),
+                child: Text(localizationService.translate('indonesian')),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

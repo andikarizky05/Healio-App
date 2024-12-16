@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
+import '../services/localization_service.dart';
 
 class HealthInfoScreen extends StatefulWidget {
-  const HealthInfoScreen({Key? key}) : super(key: key);
+  const HealthInfoScreen({super.key});
 
   @override
   _HealthInfoScreenState createState() => _HealthInfoScreenState();
@@ -47,9 +48,10 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
+    final localizationService = Provider.of<LocalizationService>(context);
     
     return Scaffold(
-      backgroundColor: Colors.white, // Added backgroundColor
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -66,16 +68,16 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Health Info',
-                  style: TextStyle(
+                Text(
+                  localizationService.translate('health_info'),
+                  style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                   ),
                 ),
                 Text(
-                  authService.currentUser?.name ?? 'Guest User',
+                  authService.currentUser?.name ?? localizationService.translate('guest_user'),
                   style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 14,
@@ -98,11 +100,10 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // Search Bar
             TextField(
               controller: _searchController,
               decoration: InputDecoration(
-                hintText: 'Search health information...',
+                hintText: localizationService.translate('search_health_info'),
                 prefixIcon: const Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
@@ -114,7 +115,6 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
             ),
             const SizedBox(height: 16),
             
-            // News List
             Expanded(
               child: ListView.builder(
                 itemCount: _filteredNews.length,
@@ -149,7 +149,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
                                 onPressed: () {
                                   // TODO: Implement read more functionality
                                 },
-                                child: const Text('Read More'),
+                                child: Text(localizationService.translate('read_more')),
                               ),
                             ],
                           ),
