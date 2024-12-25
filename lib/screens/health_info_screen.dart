@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../services/localization_service.dart';
+import '../services/notification_service.dart';
 import 'health_info_detail_screen.dart';
 
 class HealthInfoScreen extends StatefulWidget {
+  // ignore: use_super_parameters
   const HealthInfoScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _HealthInfoScreenState createState() => _HealthInfoScreenState();
 }
 
@@ -40,6 +43,18 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
   void initState() {
     super.initState();
     _filteredNews = _healthNews;
+    _addInitialNotifications();
+  }
+
+  void _addInitialNotifications() {
+    final notificationService = Provider.of<NotificationService>(context, listen: false);
+    for (var news in _healthNews) {
+      notificationService.addNotification({
+        'title': news['title']!,
+        'body': news['description']!,
+        'date': news['date']!,
+      });
+    }
   }
 
   void _filterNews(String query) {
@@ -50,6 +65,54 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
               news['description']!.toLowerCase().contains(query.toLowerCase()))
           .toList();
     });
+  }
+
+  void _showNotifications(BuildContext context) {
+    final notificationService = Provider.of<NotificationService>(context, listen: false);
+    final localizationService = Provider.of<LocalizationService>(context, listen: false);
+
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                localizationService.translate('notifications'),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              Expanded(
+                child: notificationService.notifications.isEmpty
+                    ? Center(
+                        child: Text(localizationService.translate('no_notifications')),
+                      )
+                    : ListView.builder(
+                        itemCount: notificationService.notifications.length,
+                        itemBuilder: (context, index) {
+                          final notification = notificationService.notifications[index];
+                          return ListTile(
+                            title: Text(notification['title']!),
+                            subtitle: Text(notification['body']!),
+                            trailing: Text(notification['date']!),
+                          );
+                        },
+                      ),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  notificationService.clearNotifications();
+                  Navigator.pop(context);
+                },
+                child: Text(localizationService.translate('clear_notifications')),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -97,9 +160,7 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications, color: Colors.black),
-            onPressed: () {
-              // TODO: Implement notifications functionality
-            },
+            onPressed: () => _showNotifications(context),
           ),
         ],
       ),

@@ -27,6 +27,7 @@ class AuthService extends ChangeNotifier {
     try {
       final existingUser = await DatabaseHelper.instance.getUser(email);
       if (existingUser != null) {
+        // ignore: avoid_print
         print('Registration failed: User with this email already exists');
         return false;
       }
@@ -39,9 +40,11 @@ class AuthService extends ChangeNotifier {
       );
 
       await DatabaseHelper.instance.createUser(newUser);
+      // ignore: avoid_print
       print('User registered successfully: ${newUser.email}');
       return true;
     } catch (e) {
+      // ignore: avoid_print
       print('Error during registration: $e');
       return false;
     }
@@ -54,12 +57,15 @@ class AuthService extends ChangeNotifier {
         _isAuthenticated = true;
         _currentUser = user;
         notifyListeners();
+        // ignore: avoid_print
         print('User logged in successfully: ${user.email}');
         return true;
       }
+      // ignore: avoid_print
       print('Login failed: Invalid credentials');
       return false;
     } catch (e) {
+      // ignore: avoid_print
       print('Error during login: $e');
       return false;
     }
@@ -69,6 +75,7 @@ class AuthService extends ChangeNotifier {
     _isAuthenticated = false;
     _currentUser = null;
     notifyListeners();
+    // ignore: avoid_print
     print('User logged out');
   }
 
@@ -84,12 +91,15 @@ class AuthService extends ChangeNotifier {
         await DatabaseHelper.instance.updateUser(updatedUser);
         _currentUser = updatedUser;
         notifyListeners();
+        // ignore: avoid_print
         print('Profile updated successfully for user: ${updatedUser.email}');
         return true;
       }
+      // ignore: avoid_print
       print('Profile update failed: No current user');
       return false;
     } catch (e) {
+      // ignore: avoid_print
       print('Error updating profile: $e');
       return false;
     }

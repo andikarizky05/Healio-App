@@ -35,12 +35,14 @@ class DatabaseHelper {
         name TEXT
       )
     ''');
+    // ignore: avoid_print
     print('Database table created successfully');
   }
 
   Future<void> _upgradeDB(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       await db.execute('ALTER TABLE users ADD COLUMN name TEXT');
+      // ignore: avoid_print
       print('Added name column to users table');
     }
   }
@@ -48,6 +50,7 @@ class DatabaseHelper {
   Future<User> createUser(User user) async {
     final db = await instance.database;
     await db.insert('users', user.toMap());
+    // ignore: avoid_print
     print('User created in database: ${user.email}');
     return user;
   }
@@ -62,9 +65,11 @@ class DatabaseHelper {
     );
 
     if (maps.isNotEmpty) {
+      // ignore: avoid_print
       print('User found in database: $email');
       return User.fromMap(maps.first);
     }
+    // ignore: avoid_print
     print('User not found in database: $email');
     return null;
   }

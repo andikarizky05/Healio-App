@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/localization_service.dart';
+import 'facility_details_screen.dart';
 
 class NearestFacilitiesScreen extends StatefulWidget {
+  // ignore: use_super_parameters
   const NearestFacilitiesScreen({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _NearestFacilitiesScreenState createState() => _NearestFacilitiesScreenState();
 }
 
@@ -36,7 +39,9 @@ class _NearestFacilitiesScreenState extends State<NearestFacilitiesScreen> {
   ];
 
   Future<void> _launchMaps(String mapsLink) async {
+    // ignore: deprecated_member_use
     if (await canLaunch(mapsLink)) {
+      // ignore: deprecated_member_use
       await launch(mapsLink);
     } else {
       throw 'Could not launch $mapsLink';
@@ -74,14 +79,18 @@ class _NearestFacilitiesScreenState extends State<NearestFacilitiesScreen> {
               ),
               child: InkWell(
                 onTap: () {
-                  // TODO: Navigate to facility details
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FacilityDetailsScreen(facility: facility),
+                    ),
+                  );
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Hospital Image
                       ClipRRect(
                         borderRadius: BorderRadius.circular(8),
                         child: Image.asset(
@@ -121,7 +130,6 @@ class _NearestFacilitiesScreenState extends State<NearestFacilitiesScreen> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      // Hospital Information
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

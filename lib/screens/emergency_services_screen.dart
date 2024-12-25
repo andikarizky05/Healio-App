@@ -8,7 +8,9 @@ class EmergencyServicesScreen extends StatelessWidget {
 
   Future<void> _launchAmbulanceWhatsApp() async {
     const whatsappUrl = 'https://wa.me/+6281138909119';
+    // ignore: deprecated_member_use
     if (await canLaunch(whatsappUrl)) {
+      // ignore: deprecated_member_use
       await launch(whatsappUrl);
     } else {
       throw 'Could not launch $whatsappUrl';
@@ -17,7 +19,9 @@ class EmergencyServicesScreen extends StatelessWidget {
 
   Future<void> _launchHealthComplaintsWhatsApp() async {
     const whatsappUrl = 'https://wa.me/+62343416616';
+    // ignore: deprecated_member_use
     if (await canLaunch(whatsappUrl)) {
+      // ignore: deprecated_member_use
       await launch(whatsappUrl);
     } else {
       throw 'Could not launch $whatsappUrl';
@@ -26,7 +30,9 @@ class EmergencyServicesScreen extends StatelessWidget {
 
   Future<void> _launchDoctorWhatsApp() async {
     const whatsappUrl = 'https://wa.me/+6289508077758';
+    // ignore: deprecated_member_use
     if (await canLaunch(whatsappUrl)) {
+      // ignore: deprecated_member_use
       await launch(whatsappUrl);
     } else {
       throw 'Could not launch $whatsappUrl';

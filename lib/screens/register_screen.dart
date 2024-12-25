@@ -7,6 +7,7 @@ class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _RegisterScreenState createState() => _RegisterScreenState();
 }
 
@@ -90,11 +91,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       _nameController.text,
                     );
                     if (success) {
+                      // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(localizationService.translate('registration_successful'))),
                       );
+                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                     } else {
+                      // ignore: use_build_context_synchronously
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(content: Text(localizationService.translate('registration_failed'))),
                       );
