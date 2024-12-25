@@ -6,15 +6,30 @@ import '../services/localization_service.dart';
 class EmergencyServicesScreen extends StatelessWidget {
   const EmergencyServicesScreen({super.key});
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
-    final Uri launchUri = Uri(
-      scheme: 'tel',
-      path: phoneNumber,
-    );
-    if (await canLaunchUrl(launchUri)) {
-      await launchUrl(launchUri);
+  Future<void> _launchAmbulanceWhatsApp() async {
+    const whatsappUrl = 'https://wa.me/+6281138909119';
+    if (await canLaunch(whatsappUrl)) {
+      await launch(whatsappUrl);
     } else {
-      throw 'Could not launch $phoneNumber';
+      throw 'Could not launch $whatsappUrl';
+    }
+  }
+
+  Future<void> _launchHealthComplaintsWhatsApp() async {
+    const whatsappUrl = 'https://wa.me/+62343416616';
+    if (await canLaunch(whatsappUrl)) {
+      await launch(whatsappUrl);
+    } else {
+      throw 'Could not launch $whatsappUrl';
+    }
+  }
+
+  Future<void> _launchDoctorWhatsApp() async {
+    const whatsappUrl = 'https://wa.me/+6289508077758';
+    if (await canLaunch(whatsappUrl)) {
+      await launch(whatsappUrl);
+    } else {
+      throw 'Could not launch $whatsappUrl';
     }
   }
 
@@ -37,36 +52,28 @@ class EmergencyServicesScreen extends StatelessWidget {
           children: [
             _buildEmergencyCard(
               context,
-              localizationService.translate('ambulance'),
+              'ambulance',
               Icons.emergency,
-              localizationService.translate('call_ambulance'),
-              () => _makePhoneCall('911'),
+              'call_ambulance',
+              _launchAmbulanceWhatsApp,
               Colors.red,
             ),
             const SizedBox(height: 16),
             _buildEmergencyCard(
               context,
-              localizationService.translate('health_center'),
-              Icons.local_hospital,
-              localizationService.translate('find_health_center'),
-              () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(localizationService.translate('searching_health_center'))),
-                );
-              },
+              'health_complaints_service',
+              Icons.medical_services,
+              'contact_health_complaints',
+              _launchHealthComplaintsWhatsApp,
               Colors.blue,
             ),
             const SizedBox(height: 16),
             _buildEmergencyCard(
               context,
-              localizationService.translate('doctor'),
-              Icons.medical_services,
-              localizationService.translate('contact_doctor'),
-              () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(localizationService.translate('connecting_doctor'))),
-                );
-              },
+              'doctor',
+              Icons.local_hospital,
+              'contact_doctor',
+              _launchDoctorWhatsApp,
               Colors.green,
             ),
           ],
@@ -77,12 +84,14 @@ class EmergencyServicesScreen extends StatelessWidget {
 
   Widget _buildEmergencyCard(
     BuildContext context,
-    String title,
+    String titleKey,
     IconData icon,
-    String description,
+    String descriptionKey,
     VoidCallback onTap,
     Color color,
   ) {
+    final localizationService = Provider.of<LocalizationService>(context);
+
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
@@ -113,7 +122,7 @@ class EmergencyServicesScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      localizationService.translate(titleKey),
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -121,7 +130,7 @@ class EmergencyServicesScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      description,
+                      localizationService.translate(descriptionKey),
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 14,

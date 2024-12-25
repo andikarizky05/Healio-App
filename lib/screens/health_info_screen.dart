@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_service.dart';
 import '../services/localization_service.dart';
+import 'health_info_detail_screen.dart';
 
 class HealthInfoScreen extends StatefulWidget {
-  const HealthInfoScreen({super.key});
+  const HealthInfoScreen({Key? key}) : super(key: key);
 
   @override
   _HealthInfoScreenState createState() => _HealthInfoScreenState();
@@ -14,16 +15,22 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
   final TextEditingController _searchController = TextEditingController();
   final List<Map<String, String>> _healthNews = [
     {
-      'title': 'COVID-19 Updates',
-      'description': 'Latest information about COVID-19 variants and prevention measures.',
+      'title': 'Gaya Hidup Sehat',
+      'description': 'Gaya hidup sehat adalah sebuah komitmen jangka panjang untuk menjaga atau melakukan beberapa hal agar mampu mendukung fungsi tubuh, sehingga berdampak baik bagi kesehatan.',
+      'date': '2024-12-25',
+      'source': 'Health and Wellness Institute',
     },
     {
-      'title': 'Mental Health Awareness',
-      'description': 'Understanding the importance of mental health and available resources.',
+      'title': 'Pentingnya Menjaga Kesehatan Mental',
+      'description': 'kesehatan mental sama pentingnya dengan kesehatan tubuh. Sebab, jiwa yang sehat tentu bisa membuat seseorang menjadi lebih produktif.',
+      'date': '2024-11-14',
+      'source': 'Mental Health Foundation',
     },
     {
-      'title': 'Healthy Living Tips',
-      'description': 'Daily tips for maintaining a healthy lifestyle and wellness.',
+      'title': 'Demam Berdarah',
+      'description': 'Demam berdarah atau DBD disebabkan oleh virus Dengue. Seseorang bisa terjangkit demam berdarah jika digigit oleh nyamuk Aedes aegypti atau Aedes albopictus yang telah terinfeksi virus Dengue terlebih dahulu.',
+      'date': '2024-10-13',
+      'source': 'World Health Organization',
     },
   ];
 
@@ -143,11 +150,25 @@ class _HealthInfoScreenState extends State<HealthInfoScreen> {
                           ),
                           const SizedBox(height: 12),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              Text(
+                                _filteredNews[index]['date']!,
+                                style: TextStyle(
+                                  color: Colors.grey[500],
+                                  fontSize: 12,
+                                ),
+                              ),
                               TextButton(
                                 onPressed: () {
-                                  // TODO: Implement read more functionality
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => HealthInfoDetailScreen(
+                                        healthInfo: _filteredNews[index],
+                                      ),
+                                    ),
+                                  );
                                 },
                                 child: Text(localizationService.translate('read_more')),
                               ),
