@@ -41,6 +41,7 @@ class HealthInfoDetailScreen extends StatelessWidget {
                 width: double.infinity,
                 height: 200,
                 decoration: BoxDecoration(
+                  // ignore: deprecated_member_use
                   color: Colors.blue.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
