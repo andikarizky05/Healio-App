@@ -26,6 +26,7 @@ class HelioApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Helio Health App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
