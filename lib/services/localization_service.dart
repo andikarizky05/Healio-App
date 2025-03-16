@@ -61,6 +61,7 @@ class LocalizationService extends ChangeNotifier {
       'outpatient_services': 'Outpatient Services',
       'laboratory': 'Laboratory',
       'pharmacy': 'Pharmacy',
+      'retry': 'Retry',
     },
     _indonesianCode: {
       'health_info': 'Informasi Kesehatan',
@@ -112,6 +113,7 @@ class LocalizationService extends ChangeNotifier {
       'outpatient_services': 'Layanan Rawat Jalan',
       'laboratory': 'Laboratorium',
       'pharmacy': 'Apotek',
+      'retry': 'Coba Lagi',
     },
   };
 
